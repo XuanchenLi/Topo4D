@@ -6,7 +6,7 @@
         <!-- content="Deformable Neural Radiance Fields creates free-viewpoint portraits (nerfies) from casually captured videos."> -->
   <!-- <meta name="keywords" content="Nerfies, D-NeRF, NeRF"> -->
   <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
-  <title>FaceEdit3D:3D-Aware Face Editing via Warping-Guided Latent Direction Learning</title>
+  <title>Topo4D: Topology-Preserving Gaussian Splatting for High-Fidelity 4D Head Capture</title>
 
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
@@ -47,54 +47,46 @@
     <div class="container is-max-desktop">
       <div class="columns is-centered">
         <div class="column has-text-centered">
-          <h1 class="title is-1 publication-title">3D-Aware Face Editing via Warping-Guided Latent Direction Learning</h1>
+          <h1 class="title is-1 publication-title">Topo4D: Topology-Preserving Gaussian Splatting for High-Fidelity 4D Head Capture</h1>
           <div class="is-size-5 publication-authors">
             <span class="author-block">
-              <a href="https://cyh-sj.github.io/">
-                Yuhao Cheng</a>,
+                Xuanchen Li<sup>1*</sup>,
             </span>
             <span class="author-block">
-              Zhuo Chen,
+              <a href="https://cyh-sj.github.io/">
+                Yuhao Cheng</a><sup>1*</sup>,
             </span>
             <span class="author-block">
               <a href="https://xingyuren.github.io/">
-                Xingyu Ren</a>,
+                Xingyu Ren</a><sup>1</sup>,
             </span>
             <span class="author-block">
-              Wenhan Zhu,
+              Haozhe Jia<sup>2</sup>,
             </span>
             <span class="author-block">
-              <a href=https://scholar.google.com.hk/citations?user=OOBabsUAAAAJ&hl=zh-CN>
-                Zhengqin Xu</a>,
+              Di Xu<sup>2</sup>,
             </span>
             <span class="author-block">
-              Di Xu,
-            </span>
-            <span class="author-block">
-              Changpeng Yang,
+              Wenhan Zhu<sup>1</sup>,
             </span>
             <span class="author-block">
               <a href="https://daodaofr.github.io/">
-                Yichao Yan</a>,
+                Yichao Yan</a><sup>1&dagger;</sup>,
             </span>
           </div>
 
           <div class="is-size-5 publication-authors">
-            <span class="author-block">MoE Key Lab of Artificial Intelligence, AI Institute, Shanghai Jiao Tong University</span>
+            <span class="author-block"><sup>1</sup>MoE Key Lab of Artificial Intelligence, AI Institute, Shanghai Jiao Tong University</span>
           </div>
           <div class="is-size-5 publication-authors">
-            <span class="author-block">Huawei Cloud Computing Technologies Co., Ltd</span>
-          </div>
-
-          <div class="is-size-5 has-text-weight-bold">
-              CVPR 2024
+            <span class="author-block"><sup>2</sup>Huawei Cloud Computing Technologies Co., Ltd</span>
           </div>
 
           <div class="column has-text-centered">
             <div class="publication-links">
               <!-- PDF Link. -->
               <span class="link-block">
-                <a href="static/papers/CVPR2024_FaceEdit3D.pdf"
+                <a href="static/papers/Topo4D.pdf"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                       <i class="fas fa-file-pdf"></i>
@@ -123,7 +115,7 @@
               </span> -->
               <!-- Code Link. -->
               <span class="link-block">
-                <a href="https://github.com/cyh-sj/FaceEdit3D"
+                <a href="https://github.com/XuanchenLi/Topo4D"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                       <i class="fab fa-github"></i>
@@ -154,9 +146,7 @@
     <div class="hero-body">
       <img class="img-responsive" src="./static/images/teaser.png" alt="Teaser">
       <h2 class="subtitle has-text-justified">
-        <span class="FaceEdit3D">An example of our warping-guided 3D-aware face editing method. 
-          Our method supports users to edit 3D faces in an intuitive way that drags points from multiple perspectives. 
-          Moreover, our method can achieve disentangled editing for shape, expression, and view, while maintaining 3D consistency.
+        <span class="Topo4D">Example results of our Topo4D, the proposed 4D head capture framework. Our method can produce temporal topological consistent head meshes with high-fidelity 8K textures from calibrated multi-view videos. Moreover, our method can be applied to digital character retargeting and relighting applications.
       </h2>
     </div>
   </div>
@@ -170,18 +160,11 @@
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
           <p>
-            3D facial editing, a longstanding task in computer vision with broad applications, is expected to fast and intuitively manipulate any face from arbitrary viewpoints following the user's will.
-Existing works have limitations in terms of intuitiveness, generalization, and efficiency. 
-
+           4D head capture aims to generate dynamic topological meshes and corresponding texture maps from videos, which is widely utilized in movies and games for its ability to simulate facial muscle movements and recover dynamic textures in pore-squeezing.
+The industry often adopts the method involving multi-view stereo and non-rigid alignment. However, this approach is prone to errors and heavily reliant on time-consuming manual processing by artists. To simplify this process, we propose Topo4D, a novel framework for automatic geometry and texture generation, which optimizes densely aligned 4D heads and 8K texture maps directly from calibrated multi-view time-series images. Specifically, we first represent the time-series faces as a set of dynamic 3D Gaussians with fixed topology in which the Gaussian centers are bound to the mesh vertices. Afterward, we perform alternative geometry and texture optimization frame-by-frame for high-quality geometry and texture learning while maintaining temporal topology stability.
+Finally, we can extract dynamic facial meshes in regular wiring arrangement and high-fidelity textures with pore-level details from the learned Gaussians. Extensive experiments show that our method achieves superior results than the current SOTA face reconstruction methods both in the quality of meshes and textures.
           </p>
-          <p>
-            To overcome these challenges, we propose FaceEdit3D, which allows users to directly manipulate 3D points to edit a 3D face, achieving natural and rapid face editing.
-After one or several points are manipulated by users, we propose the tri-plane warping to directly deform the view-independent 3D representation.
-To address the problem of distortion caused by tri-plane warping, we train a warp-aware encoder to project the warped face onto a standardized latent space. 
-In this space, we further propose directional latent editing to mitigate the identity bias caused by the encoder and realize the disentangled editing of various attributes.
-Extensive experiments show that our method achieves superior results with rich facial details and nice identity preservation. 
-Our approach also supports general applications like multi-attribute continuous editing and cat/car editing.
-          </p>
+        
         </div>
       </div>
     </div>
@@ -206,12 +189,7 @@ Our approach also supports general applications like multi-attribute continuous 
         <h2 class="title is-3">Pipeline</h2>
         <img class="img-responsive" src="./static/images/pipeline.png" alt="Pipeline">
         <div class="content has-text-justified">
-        <span class="Pipeline">we propose FaceEdit3D, an intuitive method to edit the 3D facial shape and expression from any perspective. 
-          Our approach involves a tri-plane warping to ensure the inherent 3D-consistent editing. 
-          To mitigate facial distortions led by the warping, we train a warp-aware encoder to project the warped face into standardized distribution and further explore the hierarchical mechanism in latent space to achieve disentangled editing. 
-          Extensive experiments demonstrate the effectiveness and efficiency of our method.
-          The additional applications also show the generalization and potential of our method across different applications. 
-          To sum up, our method provides a brand new way to manipulate the 3D representation, opening up new avenues for rapid and convenient real-image editing.
+        <span class="Pipeline">Overall pipeline of our framework. (a) We initialize Gaussian attributes and establish topological correspondence with the startup mesh. (b) Take one frame as an example, geometry-related attributes in the Gaussian Mesh of the last frame are optimized by this frame under a set of topology-aware loss items. (c) We align the Gaussian surface with the rendering surface by Gaussian normal expansion to extract more precise meshes. (d) To learn pore-level detailed colors and generate ultra-high resolution texture, we build a dense mesh by densifying Gaussians in UV space.
         </div>
       </div>
     </div>
@@ -222,12 +200,14 @@ Our approach also supports general applications like multi-attribute continuous 
 <section class="section" id="BibTeX">
   <div class="container is-max-desktop content">
     <h2 class="title">BibTeX</h2>
-    <pre><code>@InProceedings{Cheng_2024_CVPR,
+    <pre><code>
+<!--       @InProceedings{Cheng_2024_CVPR,
   author    = {Yuhao, Cheng and Zhuo, Chen and Xingyu, Ren and Wenhan, Zhu and Zhengqin, Xu and Di, Xu and Changpeng, Yang and Yichao, Yan},
   title     = {3D-Aware Face Editing via Warping-Guided Latent Direction Learning},
   booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
   year      = {2024},
-}</code></pre>
+} -->
+    </code></pre>
   </div>
 </section>
 
