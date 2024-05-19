@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <!-- <meta name="description" -->
+        <!-- content="Deformable Neural Radiance Fields creates free-viewpoint portraits (nerfies) from casually captured videos."> -->
+  <!-- <meta name="keywords" content="Nerfies, D-NeRF, NeRF"> -->
+  <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+  <title>FaceEdit3D:3D-Aware Face Editing via Warping-Guided Latent Direction Learning</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.svg">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">3D-Aware Face Editing via Warping-Guided Latent Direction Learning</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://cyh-sj.github.io/">
+                Yuhao Cheng</a>,
+            </span>
+            <span class="author-block">
+              Zhuo Chen,
+            </span>
+            <span class="author-block">
+              <a href="https://xingyuren.github.io/">
+                Xingyu Ren</a>,
+            </span>
+            <span class="author-block">
+              Wenhan Zhu,
+            </span>
+            <span class="author-block">
+              <a href=https://scholar.google.com.hk/citations?user=OOBabsUAAAAJ&hl=zh-CN>
+                Zhengqin Xu</a>,
+            </span>
+            <span class="author-block">
+              Di Xu,
+            </span>
+            <span class="author-block">
+              Changpeng Yang,
+            </span>
+            <span class="author-block">
+              <a href="https://daodaofr.github.io/">
+                Yichao Yan</a>,
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">MoE Key Lab of Artificial Intelligence, AI Institute, Shanghai Jiao Tong University</span>
+          </div>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">Huawei Cloud Computing Technologies Co., Ltd</span>
+          </div>
+
+          <div class="is-size-5 has-text-weight-bold">
+              CVPR 2024
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="static/papers/CVPR2024_FaceEdit3D.pdf"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <!-- <span class="link-block">
+                <a href="https://arxiv.org/abs/2011.12948"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span> -->
+              <!-- Video Link. -->
+              <!-- <span class="link-block">
+                <a href="https://www.youtube.com/watch?v=2XvqhwWWBsI"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-youtube"></i>
+                  </span>
+                  <span>Video</span>
+                </a>
+              </span> -->
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/cyh-sj/FaceEdit3D"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code (Coming Soon)</span>
+                  </a>
+              </span>
+              <!-- Dataset Link. -->
+              <!-- <span class="link-block">
+                <a href="https://github.com/google/nerfies/releases/tag/0.1"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="far fa-images"></i>
+                  </span>
+                  <span>Data</span>
+                  </a> -->
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <img class="img-responsive" src="./static/images/teaser.png" alt="Teaser">
+      <h2 class="subtitle has-text-justified">
+        <span class="FaceEdit3D">An example of our warping-guided 3D-aware face editing method. 
+          Our method supports users to edit 3D faces in an intuitive way that drags points from multiple perspectives. 
+          Moreover, our method can achieve disentangled editing for shape, expression, and view, while maintaining 3D consistency.
+      </h2>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            3D facial editing, a longstanding task in computer vision with broad applications, is expected to fast and intuitively manipulate any face from arbitrary viewpoints following the user's will.
+Existing works have limitations in terms of intuitiveness, generalization, and efficiency. 
+
+          </p>
+          <p>
+            To overcome these challenges, we propose FaceEdit3D, which allows users to directly manipulate 3D points to edit a 3D face, achieving natural and rapid face editing.
+After one or several points are manipulated by users, we propose the tri-plane warping to directly deform the view-independent 3D representation.
+To address the problem of distortion caused by tri-plane warping, we train a warp-aware encoder to project the warped face onto a standardized latent space. 
+In this space, we further propose directional latent editing to mitigate the identity bias caused by the encoder and realize the disentangled editing of various attributes.
+Extensive experiments show that our method achieves superior results with rich facial details and nice identity preservation. 
+Our approach also supports general applications like multi-attribute continuous editing and cat/car editing.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+
+    <!-- Paper video. -->
+    <!-- <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Video</h2>
+        <div class="publication-video">
+          <iframe src="https://www.youtube.com/embed/2XvqhwWWBsI"
+                  frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div> -->
+    <!--/ Paper video. -->
+
+
+    <!-- Paper Pipeline. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Pipeline</h2>
+        <img class="img-responsive" src="./static/images/pipeline.png" alt="Pipeline">
+        <div class="content has-text-justified">
+        <span class="Pipeline">we propose FaceEdit3D, an intuitive method to edit the 3D facial shape and expression from any perspective. 
+          Our approach involves a tri-plane warping to ensure the inherent 3D-consistent editing. 
+          To mitigate facial distortions led by the warping, we train a warp-aware encoder to project the warped face into standardized distribution and further explore the hierarchical mechanism in latent space to achieve disentangled editing. 
+          Extensive experiments demonstrate the effectiveness and efficiency of our method.
+          The additional applications also show the generalization and potential of our method across different applications. 
+          To sum up, our method provides a brand new way to manipulate the 3D representation, opening up new avenues for rapid and convenient real-image editing.
+        </div>
+      </div>
+    </div>
+    <!--/ Paper Pipeline. -->
+  </div>
+</section>
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@InProceedings{Cheng_2024_CVPR,
+  author    = {Yuhao, Cheng and Zhuo, Chen and Xingyu, Ren and Wenhan, Zhu and Zhengqin, Xu and Di, Xu and Changpeng, Yang and Yichao, Yan},
+  title     = {3D-Aware Face Editing via Warping-Guided Latent Direction Learning},
+  booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  year      = {2024},
+}</code></pre>
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <!-- <div class="content has-text-centered">
+      <a class="icon-link"
+         href="./static/videos/nerfies_paper.pdf">
+        <i class="fas fa-file-pdf"></i>
+      </a>
+      <a class="icon-link" href="https://github.com/keunhong" class="external-link" disabled>
+        <i class="fab fa-github"></i>
+      </a>
+    </div> -->
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This website is licensed under a <a rel="license"
+                                                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+          <p>
+            We borrow the website <a href="https://github.com/nerfies/nerfies.github.io">template</a> from this,
+            many thanks for their great help!
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
