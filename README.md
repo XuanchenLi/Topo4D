@@ -22,9 +22,6 @@ pip install -r requirements.txt
 git clone --recursive https://github.com/ashawkey/diff-gaussian-rasterization
 pip install ./diff-gaussian-rasterization
 
-# simple-knn
-pip install ./simple-knn
-
 # face3d
 git clone https://github.com/YadiraF/face3d
 cd face3d
