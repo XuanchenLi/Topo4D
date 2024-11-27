@@ -43,10 +43,10 @@ face_region = [
 ]
 #views that needs to be excluded
 blacklist = {
-    
+    # "J87351627", ""K19210959"
 }
 
-#cmap index for mediapipe 2D facial regions
+#cmap index for face parsing mask
 cmap_index = {
     "background": 0, "skin": 1, "l_eyebrow": 2, "r_eyebrow": 3,
     "l_eye": 4, "r_eye":5, "nose": 6, "upper_lip": 7,
