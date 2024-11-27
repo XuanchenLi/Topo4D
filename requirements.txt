@@ -1,0 +1,16 @@
+cython
+imageio
+numpy==1.23.0
+pandas
+pillow
+pywavefront==1.3.3
+pymesh==1.0.2
+trimesh==4.4.1
+scikit-image
+scikit-learn
+scipy
+torch==1.12.1
+torchvision==0.13.1
+tqdm
+mediapipe
+opencv-python
