@@ -224,7 +224,10 @@ def initialize_params(args, trans_g):
                                                                                             np.array(quad_faces_idx)
                                                                                             , face_vertex_mask)
     no_face_quad_uv_faces = np.array([variables['uv_faces_ori'][i] for i in no_face_quad_faces_idx]) 
-    # uv-space densification
+    # uv-space densification, only needs to be computed once at the begining.
+    # This step may take a few minutes, depending on the densification density.
+    # This step is actually only for obtaining the topology and interpolation weights of the dense Gaussian Mesh,
+    # which is fixed for the same topology and density. You can save the calculation result, and directly load it for acceleration.
     vertices, dense_faces, dense_uv, dense_uv_faces, new_vertex_father, new_vertex_weight = build_dense_vertices_2(variables, vertices, quad_faces, quad_faces_idx, dense_num, variables['uvs_texture_ori'])
     # The topology of the final dense Gaussian Mesh includes a few triangular faces, densified quadrilateral faces, and original non-frontal area faces 
     dense_uv_faces = tri_uv_faces.tolist() + dense_uv_faces.tolist() + no_face_quad_uv_faces.tolist()

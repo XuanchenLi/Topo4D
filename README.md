@@ -33,7 +33,18 @@ python setup.py build_ext -i
 ```
 
 ## Prepare Your Data
-\[TODO\] We will soon release some example sequence for testing.
+### Use the example testdata
+We prepare [an example sequence](https://drive.google.com/file/d/180jYP3ZCbmQVQR3ppGeeO9MrxAMyGI07/view) for you to test Topo4D, which includes the whole sequence of the low resolution 24-view images and corresponding faceparsing masks, some key frames of the 4K images for you to generate 8K textures, the camera calibration, and the startup model.
+
+### Process your own data
+Since our method can be directly extended to any capture system, you can directly appply Topo4D on your own multi-view sequences. Please refer to the example sequence to arrange the directory structure, and modify the code for reading your data.
+
+We use the off-the-shelf [face parsing method](https://github.com/hhj1897/face_parsing) to generate facial region masks.
+
+Topo4D can be applied to arbitrary topology and doesn't need to tune the parameters for different identities. However, due to the use of specific [facial region partitions](./assets/facial_regions.pkl), we strongly recommend that you directly use the same topology as ours to avoid creating facial partitions by yourself. 
+
+In addition, we suggest that you adjust the scale of the startup mesh to be similar to the example we provided, so that there is no need to finetune hyperparameters such as learning rate.
+
 
 ## Testing
 ### Optimize geometry only
