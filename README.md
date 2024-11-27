@@ -36,11 +36,11 @@ python setup.py build_ext -i
 \[TODO\] We will soon release some example sequence for testing.
 
 ## Testing
-### Optimize Geometry only
+### Optimize geometry only
 ```bash
 python train.py --input_dir "input low resolution data root" --output_dir "your output root" --exp "experiment name" --seq "sequence name"
 ```
-### Optimize Texture and Geometry
+### Optimize texture and geometry
 ```bash
 python train.py --input_dir "input low resolution data root" --output_dir "your output root" --exp "experiment name" --seq "sequence name" --dense_input_dir "input high resolution data root" --gen_tex --tex_res 8192
 ```
