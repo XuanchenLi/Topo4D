@@ -41,6 +41,8 @@ Since our method can be directly extended to any capture system, you can directl
 
 We use the off-the-shelf [face parsing method](https://github.com/hhj1897/face_parsing) to generate facial region masks.
 
+We read the camera calibration from the [metashape](https://www.agisoft.com/) xml structure, you need to modify the code if you want to use a different format.
+
 Topo4D can be applied to arbitrary topology and doesn't need to tune the parameters for different identities. However, due to the use of specific [facial region partitions](./assets/facial_regions.pkl), we strongly recommend that you directly use the same topology as ours to avoid creating facial partitions by yourself. 
 
 In addition, we suggest that you adjust the scale of the startup mesh to be similar to the example we provided, so that there is no need to finetune hyperparameters such as learning rate.
