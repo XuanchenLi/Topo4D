@@ -100,7 +100,7 @@ def params2rendervar(params):
 
 def params2rendervar_dense(params, variables):
     rendervar = {
-            'means3D': params["dense_means3D"] + variables["dense_vertex_normals"] * params["dense_disp"],
+            'means3D': params["dense_means3D"],
             'colors_precomp': params['dense_rgb_colors'],
             'rotations': torch.nn.functional.normalize(params['dense_unnorm_rotations']),
             'opacities': torch.sigmoid(params['dense_logit_opacities']),

@@ -475,14 +475,14 @@ def report_progress(params, dataset, t, i, progress_bar, every_i=500, idx=[], pa
         progress_bar.update(every_i)
         
         
-def report_progress_dense(variables, params, dataset, t, i, progress_bar, every_i=500, use_sh=False, idx=[], path=None):
+def report_progress_dense(variables, params, dataset, t, i, progress_bar, every_i=500, idx=[], path=None):
     if i % every_i == 0:
         for id in idx:
             for d in dataset:
                 if d["cam_name"] == id:
                     data = d
                     break
-            im, _, _, = Renderer(raster_settings=data['cam'])(**params2rendervar_dense(params, variables, data['cam'], use_sh=use_sh))
+            im, _, _, = Renderer(raster_settings=data['cam'])(**params2rendervar_dense(params, variables))
             curr_id = data['id']
             #im = torch.exp(params['cam_m'][curr_id])[:, None, None] * im + params['cam_c'][curr_id][:, None, None]
             psnr = calc_psnr(im, data['im']).mean()
@@ -703,17 +703,20 @@ def train(args):
 
                 update_optimizer(n_lr, optimizer)
                 loss_w = loss_weights
-
+        progress_bar.close()
         #  =================================================Texture Optimization======================================================
-        
+        sav_tex = True
         if args.gen_tex:
+            sav_tex = True
+            # num_iter_per_timestep = args.init_dense_opt_num if is_initial_timestep else args.dense_opt_num
             num_iter_per_timestep = args.dense_opt_num
             with torch.no_grad(): 
                 params, variables = update_dense_states(params, variables, is_initial_timestep)
 
             dataset = get_dataset(args.dense_input_dir, args.seq, t + 1, cameras_dense, use_mask=use_mask_dense, blacklist=blacklist)
             if len(dataset) == 0:
-                continue
+                num_iter_per_timestep = 0
+                sav_tex = False
             todo_dataset = []
             progress_bar = tqdm(range(num_iter_per_timestep), desc=f"timestep texture {t}")
 
@@ -723,17 +726,15 @@ def train(args):
                     params["dense_rgb_colors"][variables["facial_regions"]["static_masks"]] = 0.0
                     params["dense_rgb_colors"][variables["facial_regions"]["dynamic_masks"]] = 0.0
                     params["dense_rgb_colors"][variables["facial_regions"]["mouth_inner_masks"]] = 0.0
-
                 loss, variables, loss_detail = get_loss_dense(params, curr_data, variables, t, i, optimizer,
                                         use_mask=use_mask_dense, 
                                         losses_weights=loss_weights_dense)
                 loss.backward()
                 with torch.no_grad():
                     optimizer.step()
-                    optimizer.zero_grad(set_to_none=True)
-                    report_progress_dense(variables, params, dataset, t+1, i, progress_bar, every_i=args.log_freq, idx=args.log_views, path=os.path.join(args.output_dir, args.exp, args.seq))
-                     
-        progress_bar.close()
+                    optimizer.zero_grad()
+                    report_progress_dense(variables, params, dataset, t+1, i, progress_bar, every_i=args.dense_log_freq, idx=args.log_views, path=os.path.join(args.output_dir, args.exp, args.seq))
+            progress_bar.close()
         output_params.append(params2cpu(params, is_initial_timestep))
         
         
@@ -745,7 +746,7 @@ def train(args):
             save_params(output_params, args)
             write_loss_json(os.path.join(args.output_dir, args.exp, args.seq), losses, loss_weights)
         
-        save_mesh(os.path.join(args.output_dir, args.exp, args.seq, "%06d"%(t + 1)), params, variables, t + 1, res=args.tex_res, gen_texture=args.gen_tex)
+        save_mesh(os.path.join(args.output_dir, args.exp, args.seq, "%06d"%(t + 1)), params, variables, t + 1, res=args.tex_res, gen_texture=args.gen_tex and sav_tex)
 
 
 
@@ -753,10 +754,10 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
     parser.add_argument('-e', '--exp', type=str, default=f'exp_op', help="Experiment name.")
-    parser.add_argument('-s', '--seq', type=str, default="ZWL_08", help="Input sequence name.")
-    parser.add_argument('-id', '--input_dir', type=str, default=f'/data/lixuanchen/videos_low', help="Root of inputs, the input sequence should be '$input_dir/$seq'")
-    parser.add_argument('-od', '--output_dir', type=str, default=f'/data/lixuanchen/JHead', help="Root of outputs, results will be saved in '$output_dir/$exp/$seq'.")
-    parser.add_argument('-did', '--dense_input_dir', type=str, default=f'/data/lixuanchen/videos', help="Root of high resolution inputs, the input sequence should be '$dense_input_dir/$seq'")
+    parser.add_argument('-s', '--seq', type=str, default="seq_01", help="Input sequence name.")
+    parser.add_argument('-id', '--input_dir', type=str, default=f'/data/Topo4D/videos_low', help="Root of inputs, the input sequence should be '$input_dir/$seq'")
+    parser.add_argument('-od', '--output_dir', type=str, default=f'/data/Topo4D/Topo4D_results', help="Root of outputs, results will be saved in '$output_dir/$exp/$seq'")
+    parser.add_argument('-did', '--dense_input_dir', type=str, default=f'/data/Topo4D/videos', help="Root of high resolution inputs, the input sequence should be '$dense_input_dir/$seq'")
     parser.add_argument('-fn', '--frame_num', type=int, default=800, help="Frame number.")
     parser.add_argument('-t', '--gen_tex', action='store_true', help="Whether generate texture.")
     parser.add_argument('-tr', '--tex_res', type=int, default=8192, help="Texture resolution.")
@@ -766,8 +767,9 @@ if __name__ == "__main__":
 
     parser.add_argument('-ion', '--init_opt_num', type=int, default=7000, help="Iteration number for optimizing the first frame.")
     parser.add_argument('-on', '--opt_num', type=int, default=1100, help="Iteration number for geometry generation.")
-    parser.add_argument('-don', '--dense_opt_num', type=int, default=501, help="Iteration number for texture generation.")
+    parser.add_argument('-don', '--dense_opt_num', type=int, default=301, help="Iteration number for texture generation.")
     parser.add_argument('-lf', '--log_freq', type=int, default=500, help="Frequence of saving gaussian rendering results per frame.")
+    parser.add_argument('-dlf', '--dense_log_freq', type=int, default=300, help="Frequence of saving dense gaussian rendering results per frame.")
     parser.add_argument('-lv', '--log_views', type=list, default=["K98707293"], help="Views of the saved renderings.")
     parser.add_argument('-cf', '--ckp_freq', type=int, default=5, help="Frequence of saving gaussian attributes.")
 
