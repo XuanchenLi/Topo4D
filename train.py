@@ -64,7 +64,7 @@ def get_cameras(data_dir, seq, resize_factor=8):
     for fname in img_fname:
         cam, trans_g = load_camera(calib_fname, fname.split("/")[-1].split(".")[0], resize_factor=resize_factor, rt=rotate_mask[fname.split('/')[-1].split('.')[0]])
         cam_ori, trans_g = load_camera(calib_fname, fname.split("/")[-1].split(".")[0], resize_factor=1, rt=rotate_mask[fname.split('/')[-1].split('.')[0]])
-
+        
         cams[fname.split("/")[-1]] = cam
         cams_ori[fname.split("/")[-1]] = cam_ori
 
@@ -305,7 +305,7 @@ def get_loss(params, curr_data, variables, is_initial_timestep, use_mask=False, 
     rendervar['means2D'].retain_grad()
 
     if losses_weights["im"] != 0:
-        im, radius, _, = Renderer(raster_settings=curr_data['cam'])(**rendervar)
+        im, radius, _, _ = Renderer(raster_settings=curr_data['cam'])(**rendervar)
     
         curr_id = curr_data['id']
         im = torch.exp(params['cam_m'][curr_id])[:, None, None] * im + params['cam_c'][curr_id][:, None, None]
@@ -321,7 +321,7 @@ def get_loss(params, curr_data, variables, is_initial_timestep, use_mask=False, 
             # mask inner mouth to avoid lip vertices learning the wrong color
             if losses_weights["im"] != 0:
                 target_labels = ["inner_mouth"]
-                filtered_mask = get_mask(target_labels, curr_data["mask"], cmap_index)
+                filtered_mask = get_mask(target_labels, curr_data["mask"], cmap_index, variables["target_colors_low"])
                 no_masked_index = filtered_mask == 1
                 masked_gt = curr_data['im'].clone()
                 masked_gt[no_masked_index] *= 0.1
@@ -386,7 +386,7 @@ def get_loss_dense(params, curr_data, variables, timestep, iteration, optimizer,
     rendervar = params2rendervar_dense(params, variables)
     rendervar['means2D'].retain_grad()
 
-    im, radius, _, = Renderer(raster_settings=curr_data['cam'])(**rendervar)
+    im, radius, _, _= Renderer(raster_settings=curr_data['cam'])(**rendervar)
 
     variables['dense_means2D'] = rendervar['means2D']  # Gradient only accum from colour render for densification
 
@@ -397,7 +397,7 @@ def get_loss_dense(params, curr_data, variables, timestep, iteration, optimizer,
         target_labels = ["skin", "l_eyebrow", "r_eyebrow", "nose", 
                          "upper_lip", "lower_lip", "l_ear", "r_ear",
                           "hair"]
-        filtered_mask = get_mask(target_labels, curr_data["mask"], cmap_index)
+        filtered_mask = get_mask(target_labels, curr_data["mask"], cmap_index, variables["target_colors_dense"])
         masked_index = filtered_mask == 1
         masked_im = torch.zeros_like(im).cuda()
         masked_im[masked_index] = im[masked_index]
@@ -461,7 +461,7 @@ def report_progress(params, dataset, t, i, progress_bar, every_i=500, idx=[], pa
                     break
             # data = dataset[id]
             # print(dataset)
-            im, _, _, = Renderer(raster_settings=data['cam'])(**params2rendervar(params))
+            im, _, _, _= Renderer(raster_settings=data['cam'])(**params2rendervar(params))
             curr_id = data['id']
             im = torch.exp(params['cam_m'][curr_id])[:, None, None] * im + params['cam_c'][curr_id][:, None, None]
             psnr = calc_psnr(im, data['im']).mean()
@@ -482,7 +482,7 @@ def report_progress_dense(variables, params, dataset, t, i, progress_bar, every_
                 if d["cam_name"] == id:
                     data = d
                     break
-            im, _, _, = Renderer(raster_settings=data['cam'])(**params2rendervar_dense(params, variables))
+            im, _, _, _= Renderer(raster_settings=data['cam'])(**params2rendervar_dense(params, variables))
             curr_id = data['id']
             #im = torch.exp(params['cam_m'][curr_id])[:, None, None] * im + params['cam_c'][curr_id][:, None, None]
             psnr = calc_psnr(im, data['im']).mean()
@@ -596,6 +596,8 @@ def train(args):
     cameras, _, trans_g = get_cameras(args.input_dir, args.seq, resize_factor=args.down_ratio)
     cameras_dense, _, trans_g = get_cameras(args.input_dir, args.seq, resize_factor=1)
     params, variables = initialize_params(args, trans_g)
+    low_img_size = list(cameras.values())[0]["image_size"]
+    ori_img_size = list(cameras_dense.values())[0]["image_size"]
     optimizer = initialize_optimizer(params)
     variables, losses, loss_weights, loss_weights_dense = initialize_losses(variables)
     
@@ -629,6 +631,11 @@ def train(args):
 
     use_mask = True
     use_mask_dense = False
+    cmap = label_colormap(n_label=14)[:, [2, 1, 0]]    
+    if use_mask:
+        variables['target_colors_low'] = [torch.tile(torch.tensor(cmap[label_index]).reshape(3, 1, 1), (1, low_img_size[0], low_img_size[1])).cuda() for label_index in range(14)]
+    if use_mask_dense:
+        variables["target_colors_dense"] = [torch.tile(torch.tensor(cmap[label_index]).reshape(3, 1, 1), (1, ori_img_size[0], ori_img_size[1])).cuda() for label_index in range(14)]
     
     # gen_tex = False
     for t in range(args.frame_num):
@@ -753,7 +760,7 @@ def train(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('-e', '--exp', type=str, default=f'exp_op', help="Experiment name.")
+    parser.add_argument('-e', '--exp', type=str, default=f'exp_op1', help="Experiment name.")
     parser.add_argument('-s', '--seq', type=str, default="seq_01", help="Input sequence name.")
     parser.add_argument('-id', '--input_dir', type=str, default=f'/data/Topo4D/videos_low', help="Root of inputs, the input sequence should be '$input_dir/$seq'")
     parser.add_argument('-od', '--output_dir', type=str, default=f'/data/Topo4D/Topo4D_results', help="Root of outputs, results will be saved in '$output_dir/$exp/$seq'")

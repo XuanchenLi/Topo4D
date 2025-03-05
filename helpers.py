@@ -81,7 +81,8 @@ def setup_camera(cam, w, h, k, w2c, near=0.01, far=100):
         projmatrix=full_proj,
         sh_degree=0,
         campos=cam_center,
-        prefiltered=False
+        prefiltered=False,
+        debug=False
     )
     
     return cam
@@ -807,17 +808,14 @@ target_colors = [torch.tile(torch.tensor(cmap[label_index]).reshape(3, 1, 1), (1
 target_colors_multiface = [torch.tile(torch.tensor(cmap[label_index]).reshape(3, 1, 1), (1, 512, 333)).cuda() for label_index in range(14)]
 target_colors_1K = [torch.tile(torch.tensor(cmap[label_index]).reshape(3, 1, 1), (1, 1024, 750)).cuda() for label_index in range(14)]
 
-def get_mask(target_labels, mask, cmap_index):
+def get_mask(target_labels, mask, cmap_index, target_colors):
     filtered_mask = torch.zeros_like(mask)
     filtered_mask *= 0
     mask = mask * 255
 
     for label in target_labels:
         label_index = cmap_index[label]
-        if mask.shape[1] == 512:
-            target_color = target_colors[label_index]
-        else:
-            target_color = target_colors_1K[label_index]
+        target_color = target_colors[label_index]
         mask_condition = torch.all(torch.abs(mask - target_color) < 1, dim=0)
         mask_condition = torch.tile(mask_condition, (3, 1, 1))
         #print(torch.sum(mask_condition).item())
