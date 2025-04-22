@@ -978,10 +978,9 @@ def save_mesh(out_dir, params, variables, frame, res=1024, gen_texture=True):
     else:
         vertices = params["means3D"].clone().detach().cpu().numpy()
 
-    vertices = np.concatenate((vertices, np.ones((vertices.shape[0], 1))), axis=-1)  # turn to homogeneous coords
     trans_g = np.linalg.inv(variables["trans_g"])
-    vertices = trans_g.dot(vertices.T).T  # 
-    vertices = vertices[:, :3] / vertices[:, 3][:, np.newaxis]  # turn to non-homogeneous coords
+    vertices = vertices @ trans_g[:3, :3].T
+    vertices = vertices + trans_g[:3, 3]
     
     write_obj_with_uv(os.path.join(out_dir, "face.obj"),
                 vertices, copy.deepcopy(variables['faces_ori']),

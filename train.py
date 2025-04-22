@@ -123,9 +123,8 @@ def initialize_params(args, trans_g):
     uvs_texture_ori = get_vertex_uvs(scene)
 
     trans_g = np.linalg.inv(trans_g)  # global transform
-    vertices = np.concatenate((vertices, np.ones((vertices.shape[0], 1))), axis=-1)  # turn to homogeneous coords
-    vertices = trans_g.dot(vertices.T).T  # 
-    vertices = vertices[:, :3] / vertices[:, 3][:, np.newaxis]  # turn to non-homogeneous coords
+    vertices = vertices @ trans_g[:3, :3].T
+    vertices = vertices + trans_g[:3, 3]
 
     colors = compute_vertex_colors(scene)
 
