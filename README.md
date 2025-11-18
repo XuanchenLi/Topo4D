@@ -1,4 +1,5 @@
 # Topo4D: Topology-Preserving Gaussian Splatting for High-Fidelity 4D Head Capture (ECCV 2024)
+# Topo4D++: Realistic Physically Based 4D Head Capture with Topology-Preserving Gaussian Splatting and Expression Priors (T-PAMI 2025)
 
 <a href='https://arxiv.org/pdf/2406.00440/'><img alt="arXiv" src="https://img.shields.io/badge/arXiv-2310.00434-red?link=https%3A%2F%2Farxiv.org%2Fabs%2F2310.00434"></a>
 <a href='https://xuanchenli.github.io/Topo4D/'><img alt="Project Page" src="https://img.shields.io/badge/Project%20Page-blue?logo=github&labelColor=black&link=https%3A%2F%2Fraineggplant.github.io%2FDiffPoseTalk"></a>
@@ -76,3 +77,13 @@ If our work is useful for your research, please consider citing:
   organization={Springer}
 }
 ```
+```
+@article{cheng2025topo4d++,
+  title={Topo4D++: Realistic Physically Based 4D Head Capture with Topology-Preserving Gaussian Splatting and Expression Priors},
+  author={Cheng, Yuhao and Li, Xuanchen and Ren, Xingyu and Wang, Jianyu and Jia, Haozhe and Xu, Di and Zhu, Wenhan and Ni, Bingbing and Yan, Yichao},
+  journal={IEEE Transactions on Pattern Analysis and Machine Intelligence},
+  year={2025},
+  publisher={IEEE}
+}
+```
+
