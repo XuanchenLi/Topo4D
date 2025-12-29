@@ -37,7 +37,7 @@ We prepare [an example sequence](https://drive.google.com/file/d/180jYP3ZCbmQVQR
 ### Use the Topo4D++ benchmark
 We provide the JHead dataset that contains 10 talking sequences and 10 expression sequences from 20 identities.
 
-[Download Link](https://pan.baidu.com/s/1u8e1tdIIJ7ar5QdcZ3C4TA)
+[Download Link](https://pan.baidu.com/s/1u8e1tdIIJ7ar5QdcZ3C4TA?pwd=2hxy)
 
 ### Process your own data
 Since our method can be directly extended to any capture system, you can directly apply Topo4D on your own multi-view sequences. Please refer to the example sequence to arrange the directory structure, and modify the code for reading your data.
